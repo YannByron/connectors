@@ -24,8 +24,8 @@ lazy val compileScalastyle = taskKey[Unit]("compileScalastyle")
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
 val sparkVersion = "2.4.3"
-val hadoopVersion = "2.7.2"
-val hiveVersion = "2.3.7"
+val hadoopVersion = "3.2.1"
+val hiveVersion = "3.1.2"
 val hiveDeltaVersion = "0.5.0"
 
 lazy val commonSettings = Seq(
@@ -142,8 +142,10 @@ lazy val hive = (project in file("hive")) dependsOn(standalone) settings (
       ExclusionRule("ch.qos.logback", "logback-classic"),
       ExclusionRule("org.pentaho", "pentaho-aggdesigner-algorithm"),
       ExclusionRule("org.apache.hive", "hive-exec"),
+      ExclusionRule("com.google.guava", "guava"),
       ExclusionRule(organization = "com.google.protobuf")
     ),
+    "com.google.guava" % "guava" % "27.0-jre" % "test",
     "org.scalatest" %% "scalatest" % "3.0.5" % "test"
   ),
 
@@ -182,8 +184,10 @@ lazy val hiveMR = (project in file("hive-mr")) dependsOn(hive % "test->test") se
       ExclusionRule(organization = "org.apache.spark"),
       ExclusionRule(organization = "org.apache.parquet"),
       ExclusionRule("ch.qos.logback", "logback-classic"),
+      ExclusionRule("com.google.guava", "guava"),
       ExclusionRule("org.pentaho", "pentaho-aggdesigner-algorithm")
     ),
+    "com.google.guava" % "guava" % "27.0-jre" % "test",
     "org.scalatest" %% "scalatest" % "3.0.5" % "test"
   )
 )
@@ -249,7 +253,7 @@ lazy val standalone = (project in file("standalone"))
         ExclusionRule("org.slf4j", "slf4j-api"),
         ExclusionRule("org.apache.parquet", "parquet-hadoop")
       ),
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.6.7.1",
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.8",
       "org.json4s" %% "json4s-jackson" % "3.5.3" excludeAll (
         ExclusionRule("com.fasterxml.jackson.core"),
         ExclusionRule("com.fasterxml.jackson.module")
