@@ -24,8 +24,9 @@ lazy val compileScalastyle = taskKey[Unit]("compileScalastyle")
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
 val sparkVersion = "2.4.3"
-val hadoopVersion = "3.2.1"
+val hadoopVersion = "3.1.0"
 val hiveVersion = "3.1.2"
+val tezVersion = "0.9.2"
 val hiveDeltaVersion = "0.5.0"
 
 lazy val commonSettings = Seq(
@@ -129,11 +130,13 @@ lazy val hive = (project in file("hive")) dependsOn(standalone) settings (
       ExclusionRule(organization = "org.apache.spark"),
       ExclusionRule(organization = "org.apache.parquet"),
       ExclusionRule("org.pentaho", "pentaho-aggdesigner-algorithm"),
+      ExclusionRule(organization = "org.eclipse.jetty"),
       ExclusionRule(organization = "com.google.protobuf")
     ),
     "org.apache.hive" % "hive-metastore" % hiveVersion % "provided"  excludeAll(
       ExclusionRule(organization = "org.apache.spark"),
       ExclusionRule(organization = "org.apache.parquet"),
+      ExclusionRule(organization = "org.eclipse.jetty"),
       ExclusionRule("org.apache.hive", "hive-exec")
     ),
     "org.apache.hive" % "hive-cli" % hiveVersion % "test" excludeAll(
@@ -143,9 +146,9 @@ lazy val hive = (project in file("hive")) dependsOn(standalone) settings (
       ExclusionRule("org.pentaho", "pentaho-aggdesigner-algorithm"),
       ExclusionRule("org.apache.hive", "hive-exec"),
       ExclusionRule("com.google.guava", "guava"),
+      ExclusionRule(organization = "org.eclipse.jetty"),
       ExclusionRule(organization = "com.google.protobuf")
     ),
-    "com.google.guava" % "guava" % "27.0-jre" % "test",
     "org.scalatest" %% "scalatest" % "3.0.5" % "test"
   ),
 
@@ -174,6 +177,7 @@ lazy val hiveMR = (project in file("hive-mr")) dependsOn(hive % "test->test") se
     "org.apache.hive" % "hive-exec" % hiveVersion % "provided" excludeAll(
       ExclusionRule(organization = "org.apache.spark"),
       ExclusionRule(organization = "org.apache.parquet"),
+      ExclusionRule(organization = "org.eclipse.jetty"),
       ExclusionRule("org.pentaho", "pentaho-aggdesigner-algorithm")
     ),
     "org.apache.hadoop" % "hadoop-common" % hadoopVersion % "test" classifier "tests",
@@ -185,9 +189,9 @@ lazy val hiveMR = (project in file("hive-mr")) dependsOn(hive % "test->test") se
       ExclusionRule(organization = "org.apache.parquet"),
       ExclusionRule("ch.qos.logback", "logback-classic"),
       ExclusionRule("com.google.guava", "guava"),
+      ExclusionRule(organization = "org.eclipse.jetty"),
       ExclusionRule("org.pentaho", "pentaho-aggdesigner-algorithm")
     ),
-    "com.google.guava" % "guava" % "27.0-jre" % "test",
     "org.scalatest" %% "scalatest" % "3.0.5" % "test"
   )
 )
@@ -209,12 +213,14 @@ lazy val hiveTez = (project in file("hive-tez")) dependsOn(hive % "test->test") 
       ExclusionRule(organization = "org.apache.spark"),
       ExclusionRule(organization = "org.apache.parquet"),
       ExclusionRule("org.pentaho", "pentaho-aggdesigner-algorithm"),
+      ExclusionRule(organization = "org.eclipse.jetty"),
       ExclusionRule(organization = "com.google.protobuf")
     ),
     "org.jodd" % "jodd-core" % "3.5.2",
     "org.apache.hive" % "hive-metastore" % hiveVersion % "provided" excludeAll(
       ExclusionRule(organization = "org.apache.spark"),
       ExclusionRule(organization = "org.apache.parquet"),
+      ExclusionRule(organization = "org.eclipse.jetty"),
       ExclusionRule("org.apache.hive", "hive-exec")
     ),
     "org.apache.hadoop" % "hadoop-common" % hadoopVersion % "test" classifier "tests",
@@ -227,13 +233,14 @@ lazy val hiveTez = (project in file("hive-tez")) dependsOn(hive % "test->test") 
       ExclusionRule("ch.qos.logback", "logback-classic"),
       ExclusionRule("org.pentaho", "pentaho-aggdesigner-algorithm"),
       ExclusionRule("org.apache.hive", "hive-exec"),
+      ExclusionRule(organization = "org.eclipse.jetty"),
       ExclusionRule(organization = "com.google.protobuf")
     ),
     "org.apache.hadoop" % "hadoop-yarn-common" % hadoopVersion % "test",
     "org.apache.hadoop" % "hadoop-yarn-api" % hadoopVersion % "test",
-    "org.apache.tez" % "tez-mapreduce" % "0.8.4" % "test",
-    "org.apache.tez" % "tez-dag" % "0.8.4" % "test",
-    "org.apache.tez" % "tez-tests" % "0.8.4" % "test" classifier "tests",
+    "org.apache.tez" % "tez-mapreduce" % tezVersion % "test",
+    "org.apache.tez" % "tez-dag" % tezVersion % "test",
+    "org.apache.tez" % "tez-tests" % tezVersion % "test" classifier "tests",
     "com.esotericsoftware" % "kryo-shaded" % "4.0.2" % "test",
     "org.scalatest" %% "scalatest" % "3.0.5" % "test"
   )
